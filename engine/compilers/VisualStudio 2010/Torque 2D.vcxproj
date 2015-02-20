@@ -432,6 +432,7 @@
     <ClCompile Include="..\..\source\io\zip\zipObject.cc" />
     <ClCompile Include="..\..\source\io\zip\zipSubStream.cc" />
     <ClCompile Include="..\..\source\io\zip\zipTempStream.cc" />
+    <ClCompile Include="..\..\source\math\Array2D.cc" />
     <ClCompile Include="..\..\source\math\math_ScriptBinding.cc" />
     <ClCompile Include="..\..\source\math\mPoint.cpp" />
     <ClCompile Include="..\..\source\math\rectClipper.cpp" />
@@ -939,6 +940,7 @@
     <ClInclude Include="..\..\source\io\zip\zipStatFilter.h" />
     <ClInclude Include="..\..\source\io\zip\zipSubStream.h" />
     <ClInclude Include="..\..\source\io\zip\zipTempStream.h" />
+    <ClInclude Include="..\..\source\math\Array2D.h" />
     <ClInclude Include="..\..\source\math\box_ScriptBinding.h" />
     <ClInclude Include="..\..\source\math\matrix_ScriptBinding.h" />
     <ClInclude Include="..\..\source\math\random_ScriptBinding.h" />
