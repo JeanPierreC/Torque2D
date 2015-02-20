@@ -1425,6 +1425,12 @@
     <ClCompile Include="..\..\source\2d\assets\SkeletonAsset.cc">
       <Filter>2d\assets</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\math\Array2D.cc">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\game\psPaths.cc">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\audio\audio.h">
@@ -3158,6 +3164,12 @@
     </ClInclude>
     <ClInclude Include="..\..\source\2d\assets\SkeletonAsset_ScriptBinding.h">
       <Filter>2d\assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\math\Array2D.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\game\psPaths.h">
+      <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

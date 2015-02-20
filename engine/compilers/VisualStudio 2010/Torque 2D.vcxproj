@@ -355,6 +355,7 @@
     <ClCompile Include="..\..\source\delegates\delegateSignal.cpp" />
     <ClCompile Include="..\..\source\game\defaultGame.cc" />
     <ClCompile Include="..\..\source\game\gameInterface.cc" />
+    <ClCompile Include="..\..\source\game\psPaths.cc" />
     <ClCompile Include="..\..\source\graphics\bitmapBmp.cc" />
     <ClCompile Include="..\..\source\graphics\bitmapJpeg.cc" />
     <ClCompile Include="..\..\source\graphics\bitmapPng.cc" />
@@ -854,6 +855,7 @@
     <ClInclude Include="..\..\source\game\gameConnection_ScriptBinding.h" />
     <ClInclude Include="..\..\source\game\gameInterface.h" />
     <ClInclude Include="..\..\source\game\gameInterface_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\game\psPaths.h" />
     <ClInclude Include="..\..\source\game\version_ScriptBinding.h" />
     <ClInclude Include="..\..\source\graphics\color.h" />
     <ClInclude Include="..\..\source\graphics\color_ScriptBinding.h" />
