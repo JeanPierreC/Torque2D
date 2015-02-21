@@ -47,25 +47,58 @@ function CompositeSpriteToy::createIsoLayout( %this )
 	// Calculate a range.
 	%range = mSqrt( CompositeSpriteToy.SpriteCount ) * 0.5;
 	if ( %range < 1 ) %range = 1;
-    	
+
+	// Path Finding
+	// Added to output debug msgs Path Finding
+	$DebugOut = true;
+
+   // setup the grid representation of the tiles
+   $XSIZE = $YSIZE = mRound( %range )*2;// In the CompositeSpireToy, x bounds and y bounds are the same
+
+   $NAVMESH = new Array2D( );                        // Instantiate object
+   $NAVMESH.initializeArray( $XSIZE, $YSIZE, 0 );     // init with proper bounds and 0 as a starter value;
+
+   $READY_TO_PLACE_STARTING_LOCATION = false;       // These bools are really just hacks to tie into the composite sprite toy
+   $READY_TO_PLACE_GOAL_LOCATION = false;
+   $RENDER_PATH = false;
+
+   $goalPoint = "";                                 // target and start position for the path.  Globaled for this demo.
+   $startingPoint = "";
+
+   // arrays are zero indexed
+   %xx = 0;
+   %yy = 0;
+
 	// Add some sprites.
-    for ( %y = -%range; %y <= %range; %y++ )
+    for ( %y = -%range; %y <= %range; %y++ )        // usually I'd have my second variable initialized and incremented here, but can't in tScript
 	{
-	    for ( %x = -%range; %x <= %range; %x++ )
+	    for ( %x = -%range; %x <= %range; %x++ )    // usually I'd have my second variable initialized and incremented here, but can't in tScript
         {
             // Add a sprite with the specified logical position.
 	        // In isometric layout this two-part position is scaled by the default sprite-stride.            
             %composite.addSprite( %x SPC %y );
             
+            // every cell is pathable.
+            $NAVMESH.setValue( %xx, %yy, 0 );         // All locations are fair play because the iso grid doesn't have holes at this point.
+
             // Set the sprite image with a random frame.
             // We could also use an animation here.            
             %composite.setSpriteImage( "CompositeSpriteToy:isoTiles", getRandom(0,4) );
+            %xx++;
         }
+        %yy++;
+        %xx=0;
 	}
 	
 	// Add to the scene.
 	SandboxScene.add( %composite );
 	
 	// Set the composite sprite toy.
-	CompositeSpriteToy.CompositeSprite = %composite;	
+	CompositeSpriteToy.CompositeSprite = %composite;
+
+	// Init the path solver
+	$pathSolver = new PathSolver( );
+
+	// the ones are the max value for a blocker.  anything less than 1 and > 0 is considered pathable
+    $pathSolver.initGrid( $NAVMESH,$XSIZE,$YSIZE, 0, 1 );     // now that the array is populated, we pass it to the solver object.
 }
