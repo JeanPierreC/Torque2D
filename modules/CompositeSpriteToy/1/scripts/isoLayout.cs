@@ -55,6 +55,9 @@ function CompositeSpriteToy::createIsoLayout( %this )
    // setup the grid representation of the tiles
    $XSIZE = $YSIZE = mRound( %range )*2;// In the CompositeSpireToy, x bounds and y bounds are the same
 
+   if(isObject($NAVMESH))
+    $NAVMESH.delete();
+
    $NAVMESH = new Array2D( );                        // Instantiate object
    $NAVMESH.initializeArray( $XSIZE, $YSIZE, 0 );     // init with proper bounds and 0 as a starter value;
 
@@ -97,6 +100,8 @@ function CompositeSpriteToy::createIsoLayout( %this )
 	CompositeSpriteToy.CompositeSprite = %composite;
 
 	// Init the path solver
+	if(isObject($pathSolver))
+	    $pathSolver.delete();
 	$pathSolver = new PathSolver( );
 
 	// the ones are the max value for a blocker.  anything less than 1 and > 0 is considered pathable
