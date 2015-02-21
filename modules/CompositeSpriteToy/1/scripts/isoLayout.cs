@@ -53,13 +53,6 @@ function CompositeSpriteToy::createIsoLayout( %this )
 	$DebugOut = true;
 
    // setup the grid representation of the tiles
-   $XSIZE = $YSIZE = mRound( %range )*2;// In the CompositeSpireToy, x bounds and y bounds are the same
-
-   if(isObject($NAVMESH))
-    $NAVMESH.delete();
-
-   $NAVMESH = new Array2D( );                        // Instantiate object
-   $NAVMESH.initializeArray( $XSIZE, $YSIZE, 0 );     // init with proper bounds and 0 as a starter value;
 
    $READY_TO_PLACE_STARTING_LOCATION = false;       // These bools are really just hacks to tie into the composite sprite toy
    $READY_TO_PLACE_GOAL_LOCATION = false;
@@ -98,14 +91,6 @@ function CompositeSpriteToy::createIsoLayout( %this )
 	
 	// Set the composite sprite toy.
 	CompositeSpriteToy.CompositeSprite = %composite;
-
-	// Init the path solver
-	if(isObject($pathSolver))
-	    $pathSolver.delete();
-	$pathSolver = new PathSolver( );
-
-	// the ones are the max value for a blocker.  anything less than 1 and > 0 is considered pathable
-    $pathSolver.initGrid( $NAVMESH,$XSIZE,$YSIZE, 0, 1 );     // now that the array is populated, we pass it to the solver object.
 
     //GUI
     PathFinding_Calculate_Path.visible = 1;

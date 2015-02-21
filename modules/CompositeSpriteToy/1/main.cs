@@ -46,6 +46,7 @@ function CompositeSpriteToy::create( %this )
     addNumericOption("Maximum Sprite Count", 10, 1000, 10, "setSpriteCount", CompositeSpriteToy.SpriteCount, true, "Sets the maximum number of sprites to create." );
     addNumericOption("Angular Velocity", -180, 180, 20, "setAngularVelocity", CompositeSpriteToy.AngularVelocity, false, "Sets the rate at which the composite sprite spins." );    
     addFlagOption("Render Isolated", "setRenderIsolated", CompositeSpriteToy.RenderIsolated, true , "Whether the composite renders its sprites isolated from the scene layer it occupies or not.");
+    addFlagOption("Initialize Path Finding", "initPathFinding", CompositeSpriteToy.pathFindingInitialized, true , "Path Finding: Initialize TileMap and Path Solver.  Should only be called after Composite Sprite has been generated and with appropriate size.");
     
     // Reset the toy.
     %this.reset();     
@@ -116,6 +117,25 @@ function CompositeSpriteToy::setSpriteCount( %this, %value )
 function CompositeSpriteToy::setRenderIsolated( %this, %value )
 {
     CompositeSpriteToy.RenderIsolated = %value;
+}
+
+function CompositeSpriteToy::initPathFinding ( %this, %value )
+{
+    CompositeSpriteToy.pathFindingInitialized = %value;
+
+    if(isObject($NAVMESH))
+        $NAVMESH.delete();
+
+   $NAVMESH = new Array2D( );                        // Instantiate object
+   $NAVMESH.initializeArray( $XSIZE, $YSIZE, 0 );     // init with proper bounds and 0 as a starter value;
+
+    // Init the path solver
+	if(isObject($pathSolver))
+	    $pathSolver.delete();
+	$pathSolver = new PathSolver( );
+
+	// the ones are the max value for a blocker.  anything less than 1 and > 0 is considered pathable
+    $pathSolver.initGrid( $NAVMESH,$XSIZE,$YSIZE, 0, 1 );     // now that the array is populated, we pass it to the solver object.
 }
 
 //-----------------------------------------------------------------------------
