@@ -3,6 +3,6 @@
     ImageFile="isotiles.png"
     CellStrideY="22"
     CellCountX="1"
-    CellCountY="5"
+    CellCountY="8"
     CellWidth="18"
     CellHeight="19" />
