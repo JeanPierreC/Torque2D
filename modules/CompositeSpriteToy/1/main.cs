@@ -162,7 +162,50 @@ function CompositeSpriteToy::onTouchDown(%this, %touchID, %worldPosition)
         // Select the sprite Id.
         %compositeSprite.selectSpriteId( %spriteId );
         
+        // Path Finding
+        // Take over the mouse down
+        if(isObject($pathSolver))
+        {
+            if(%spriteId%$XSIZE)
+                %x = mFloor(%spriteId / $XSIZE);
+            else
+                %x = mFloor(%spriteId / $XSIZE) -1;
+
+            %y = %spriteId - ($YSIZE * %x) - 1;
+
+            // if the "Set Starting Position" button was pressed on the GUI
+            // We break because we only wait one starting point.
+            if($READY_TO_PLACE_STARTING_LOCATION)
+            {
+                $startingPoint = %x @ "," @ %y;
+                if($DebugOut)
+                    echo("Starting Point: " @ $startingPoint);
+                break;
+            }
+
+            // if the "Set Target Position" button was pressed on the GUI
+            // We break because we only wait one goal point.
+            if($READY_TO_PLACE_GOAL_LOCATION)
+            {
+                $goalPoint = %x @ "," @ %y;
+                if($DebugOut)
+                    echo("Goal Point: " @ $goalPoint);
+                break;
+            }
+
+            // If neither the "Set Target Position" or  "Set Starting Position"
+            // were pressed then, default behavior in the compositeSpriteToy is
+            // to remove the block at that location.  We want to update our grid
+            // and indicate that the location is blocked (not passable)
+            if(!$READY_TO_PLACE_STARTING_LOCATION || !$READY_TO_PLACE_GOAL_LOCATION )
+                $pathSolver.updateNavGridPassability(%x @ "," @ %y, 1);
+        }
+
         // Remove the se
-        %compositeSprite.removeSprite();
+        if(!$READY_TO_PLACE_STARTING_LOCATION || !$READY_TO_PLACE_GOAL_LOCATION )
+            %compositeSprite.removeSprite();
+
     }
+    $READY_TO_PLACE_STARTING_LOCATION=false;
+    $READY_TO_PLACE_GOAL_LOCATION = false;
 }
