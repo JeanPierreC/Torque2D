@@ -53,6 +53,7 @@ function CompositeSpriteToy::createIsoLayout( %this )
 	$DebugOut = true;
 
    // setup the grid representation of the tiles
+   $XSIZE = $YSIZE = mCeil( %range *2);// In the CompositeSpireToy, x bounds and y bounds are the same
 
    $READY_TO_PLACE_STARTING_LOCATION = false;       // These bools are really just hacks to tie into the composite sprite toy
    $READY_TO_PLACE_GOAL_LOCATION = false;
