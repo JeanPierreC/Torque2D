@@ -62,10 +62,6 @@ function CompositeSpriteToy::createIsoLayout( %this )
    $goalPoint = "";                                 // target and start position for the path.  Globaled for this demo.
    $startingPoint = "";
 
-   // arrays are zero indexed
-   %xx = 0;
-   %yy = 0;
-
 	// Add some sprites.
     for ( %y = -%range; %y <= %range; %y++ )        // usually I'd have my second variable initialized and incremented here, but can't in tScript
 	{
@@ -74,17 +70,11 @@ function CompositeSpriteToy::createIsoLayout( %this )
             // Add a sprite with the specified logical position.
 	        // In isometric layout this two-part position is scaled by the default sprite-stride.            
             %composite.addSprite( %x SPC %y );
-            
-            // every cell is pathable.
-            $NAVMESH.setValue( %xx, %yy, 0 );         // All locations are fair play because the iso grid doesn't have holes at this point.
 
             // Set the sprite image with a random frame.
             // We could also use an animation here.            
             %composite.setSpriteImage( "CompositeSpriteToy:isoTiles", getRandom(0,4) );
-            %xx++;
         }
-        %yy++;
-        %xx=0;
 	}
 	
 	// Add to the scene.
