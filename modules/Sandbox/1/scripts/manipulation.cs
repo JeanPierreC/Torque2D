@@ -444,3 +444,44 @@ function cycleManipulation( %make )
         Sandbox.useManipulation("off");
     }          
 }
+
+
+//-----------------------------------------------------------------------------
+// Path Finding
+// Note:  Path Finding hack methods to show that it works int he demo.  - JPC
+function placeStart( %make )
+{
+    // Finish if being released.
+    if ( !%make )
+        return;
+
+    $READY_TO_PLACE_STARTING_LOCATION = true;
+}
+
+function placeGoal( %make )
+{
+    // Finish if being released.
+    if ( !%make )
+        return;
+
+    $READY_TO_PLACE_GOAL_LOCATION = true;
+}
+
+function RecalculatePath( %make )
+{
+    // Finish if being released.
+    if ( !%make )
+        return;
+
+    if($goalPoint!$= "" && $startingPoint !$= "")
+    {
+        %path = $pathSolver.getPath($startingPoint, $goalPoint);
+        $pathSolver.GridOutToFile();
+
+        if($DebugOut)
+            echo("Path: " @ %path);
+
+        $startingPoint = "";
+        $goalPoint = "";
+    }
+}
