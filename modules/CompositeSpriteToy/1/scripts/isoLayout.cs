@@ -62,6 +62,8 @@ function CompositeSpriteToy::createIsoLayout( %this )
    $goalPoint = "";                                 // target and start position for the path.  Globaled for this demo.
    $startingPoint = "";
 
+    $oldPath = "";
+
 	// Add some sprites.
     for ( %y = -%range; %y <= %range; %y++ )        // usually I'd have my second variable initialized and incremented here, but can't in tScript
 	{

@@ -66,7 +66,7 @@ function CompositeSpriteToy::reset( %this )
     SandboxScene.clear();
     
     // Create the background.
-    %this.createBackground();
+    //%this.createBackground();
     
     // Create the appropriate layout.
     switch$( CompositeSpriteToy.LayoutMode )
@@ -143,7 +143,11 @@ function CompositeSpriteToy::initPathFinding ( %this, %value )
 function CompositeSpriteToy::createBackground(%this)
 {
     // Create the checkered background.
-    %obj = new Scroller();
+
+    // Path Finding
+    // STOP the scrolling
+
+    /*%obj = new Scroller();
     %obj.Image = "ToyAssets:checkered";
     %obj.BlendColor = SlateGray;
     %obj.Size = 200;
@@ -153,11 +157,10 @@ function CompositeSpriteToy::createBackground(%this)
     %obj.ScrollY = 7;
     
     // Add to the scene.
-    SandboxScene.add( %obj );   
+    SandboxScene.add( %obj );   */
 }
 
 //-----------------------------------------------------------------------------
-
 function CompositeSpriteToy::onTouchDown(%this, %touchID, %worldPosition)
 {
     // Fetch the composite sprite.
@@ -184,22 +187,27 @@ function CompositeSpriteToy::onTouchDown(%this, %touchID, %worldPosition)
         
         // Path Finding
         // Take over the mouse down
-        if(isObject($pathSolver))
+        if( CompositeSpriteToy.pathFindingInitialized )
         {
-            if(%spriteId%$XSIZE)
-                %x = mFloor(%spriteId / $XSIZE);
-            else
-                %x = mFloor(%spriteId / $XSIZE) -1;
-
-            %y = %spriteId - ($YSIZE * %x) - 1;
+            %position = idToGridPos( %spriteId );
 
             // if the "Set Starting Position" button was pressed on the GUI
             // We break because we only wait one starting point.
             if($READY_TO_PLACE_STARTING_LOCATION)
             {
-                $startingPoint = %x @ "," @ %y;
+                if($startingPoint !$= "")
+                {
+                    %oldTarget = gridPosToID ( $startingPoint );
+                    %compositeSprite.selectSpriteId( %oldTarget );
+                    %compositeSprite.setSpriteImage( "CompositeSpriteToy:isoTiles", getRandom( 0,4 ) );
+                }
+
+                $startingPoint = %position;
                 if($DebugOut)
-                    echo("Starting Point: " @ $startingPoint);
+                    echo( "Starting Point: " @ $startingPoint );
+
+                %compositeSprite.selectSpriteId( %spriteId );
+                %compositeSprite.setSpriteImage( "CompositeSpriteToy:isoTiles", 5 );
                 break;
             }
 
@@ -207,9 +215,19 @@ function CompositeSpriteToy::onTouchDown(%this, %touchID, %worldPosition)
             // We break because we only wait one goal point.
             if($READY_TO_PLACE_GOAL_LOCATION)
             {
-                $goalPoint = %x @ "," @ %y;
+                if($goalPoint !$= "")
+                {
+                    %oldTarget = gridPosToID ( $goalPoint );
+                    %compositeSprite.selectSpriteId( %oldTarget );
+                    %compositeSprite.setSpriteImage( "CompositeSpriteToy:isoTiles", getRandom( 0,4 ) );
+                }
+
+                $goalPoint = %position;
                 if($DebugOut)
-                    echo("Goal Point: " @ $goalPoint);
+                    echo( "Goal Point: " @ $goalPoint );
+
+                %compositeSprite.selectSpriteId( %spriteId );
+                %compositeSprite.setSpriteImage( "CompositeSpriteToy:isoTiles", 6 );
                 break;
             }
 
@@ -218,7 +236,7 @@ function CompositeSpriteToy::onTouchDown(%this, %touchID, %worldPosition)
             // to remove the block at that location.  We want to update our grid
             // and indicate that the location is blocked (not passable)
             if(!$READY_TO_PLACE_STARTING_LOCATION || !$READY_TO_PLACE_GOAL_LOCATION )
-                $pathSolver.updateNavGridPassability(%x @ "," @ %y, 1);
+                $pathSolver.updateNavGridPassability(%position, 1);
         }
 
         // Remove the se

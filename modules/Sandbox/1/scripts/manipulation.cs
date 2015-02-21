@@ -475,13 +475,38 @@ function RecalculatePath( %make )
 
     if($goalPoint!$= "" && $startingPoint !$= "")
     {
+        // Fetch the composite sprite.
+        %compositeSprite = CompositeSpriteToy.CompositeSprite;
+
+        // Drawing the old path
+        if( $oldPath !$= "")
+        {
+            %count = getWordCount( $oldPath );
+            for (%i = 0; %i < %count-1; %i++)
+            {
+                %pos = getWord($oldPath, %i);
+                %compositeSprite.selectSpriteId( gridPosToID ( %pos ) );
+                %compositeSprite.setSpriteImage( "CompositeSpriteToy:isoTiles", getRandom( 0,4 ) );
+            }
+        }
+
+        // New Path
         %path = $pathSolver.getPath($startingPoint, $goalPoint);
-        $pathSolver.GridOutToFile();
 
         if($DebugOut)
-            echo("Path: " @ %path);
+            $pathSolver.GridOutToFile();
 
-        $startingPoint = "";
-        $goalPoint = "";
+        // Drawing the new path
+        %count = getWordCount( %path );
+        for (%i = 0; %i < %count-1; %i++)
+        {
+            %pos = getWord(%path, %i);
+            %compositeSprite.selectSpriteId( gridPosToID ( %pos ) );
+            %compositeSprite.setSpriteImage( "CompositeSpriteToy:isoTiles", 7 );
+        }
+
+        $oldPath = %path;
+        if($DebugOut)
+            echo("Path: " @ %path);
     }
 }
