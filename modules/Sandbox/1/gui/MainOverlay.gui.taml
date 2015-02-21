@@ -27,7 +27,70 @@
         Active="1"
         hovertime="1000"
         groupNum="-1"
-        useMouseEvents="1" />		
+        useMouseEvents="1" />
+
+    <!-- place Goal-->
+    <GuiButtonCtrl
+        Name="PathFinding_Place_Target"
+        Profile="BlueButtonProfile"
+		Text="Place Target"
+		ButtonType="PushButton"
+        command="placeGoal(true);"
+        canSaveDynamicFields="0"
+        isContainer="0"
+        HorizSizing="left"
+        VertSizing="bottom"
+        Position="260 0"
+        Extent="100 30"
+        MinExtent="8 2"
+        canSave="1"
+        Visible="0"
+        Active="1"
+        hovertime="1000"
+        groupNum="-1"
+        useMouseEvents="1" />
+
+    <!-- place Starting point-->
+    <GuiButtonCtrl
+        Name="PathFinding_Place_Start"
+        Profile="BlueButtonProfile"
+		Text="Place Starting Location"
+		ButtonType="PushButton"
+        command="placeStart(true);"
+        canSaveDynamicFields="0"
+        isContainer="0"
+        HorizSizing="left"
+        VertSizing="bottom"
+        Position="130 0"
+        Extent="120 30"
+        MinExtent="8 2"
+        canSave="1"
+        Visible="0"
+        Active="1"
+        hovertime="1000"
+        groupNum="-1"
+        useMouseEvents="1" />
+
+    <!-- Recalculate path-->
+    <GuiButtonCtrl
+        Name="PathFinding_Calculate_Path"
+        Profile="BlueButtonProfile"
+		Text="Calculate path"
+		ButtonType="PushButton"
+        command="RecalculatePath(true);"
+        canSaveDynamicFields="0"
+        isContainer="0"
+        HorizSizing="left"
+        VertSizing="bottom"
+        Position="1 0"
+        Extent="120 30"
+        MinExtent="8 2"
+        canSave="1"
+        Visible="0"
+        Active="1"
+        hovertime="1000"
+        groupNum="-1"
+        useMouseEvents="1" />
 
 	<!-- Pause Scene Mode-->
     <GuiButtonCtrl

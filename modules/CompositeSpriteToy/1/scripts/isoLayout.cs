@@ -101,4 +101,9 @@ function CompositeSpriteToy::createIsoLayout( %this )
 
 	// the ones are the max value for a blocker.  anything less than 1 and > 0 is considered pathable
     $pathSolver.initGrid( $NAVMESH,$XSIZE,$YSIZE, 0, 1 );     // now that the array is populated, we pass it to the solver object.
+
+    //GUI
+    PathFinding_Calculate_Path.visible = 1;
+    PathFinding_Place_Start.visible = 1;
+    PathFinding_Place_Target.visible = 1;
 }
