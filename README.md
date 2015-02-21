@@ -1,53 +1,99 @@
-![Torque Logo](http://static.garagegames.com/static/pg/logokits/Torque-Logo_H.png)
-## Torque 2D 3.1
+### Repository based on T2D 3.1.  This is not official, nor have I requested a pull request.
 
-MIT Licensed Open Source version of Torque 2D from GarageGames. Maintained by the T2D Steering Committee and contributions from the community.
+![Path Finding Demo](http://media.tumblr.com/823865910bf1702f7a838ee1e8ebec18/tumblr_inline_nk57u1Aig31rxazf0.jpg)
 
-Dedicated to 2D game development, Torque 2D is an extremely powerful, flexible, and fast C++ engine which has been used in hundreds of professional games. It is a true cross platform solution providing you access to Windows, OSX, Linux, iOS, Android, and the web - all from one codebase. It includes an OpenGL batched rendering system, Box2D physics, OpenAL audio, skeletal and spritesheet animation, automated asset management, a modular project structure, TAML object persistence, and a C-like scripting language.
+## A Star Path finding for Torque 2D
 
-### Branches
+Well, it's about time I give back.
 
-Here is an overview of the branches found in the Torque 2D repository: 
+This is a path finding resource for T2D.
 
-* **master:** this branch contains the current stable release code that can be used in a production environment. 
-* **development:** this branch is dedicated to active development. It contains the latest bug fixes, new features, and other updates. All pull requests need to go to the development branch. While we try our best to test all incoming changes, it is possible for mistakes to slip in therefore this branch should always be considered unstable.
-* **gh-pages:** this branch currently contains the html pages generated from doxygen for the engine and TorqueScript references.
+### What does it do?
+A * Path Solving. Admittedly, A * isn't the most robust path finding algorithm to implement, but it is fairly easy to implement and to understand. Hence it's choice.
 
-### Precompiled Version
+### How does it do it?
+I've introduced two classes. A Array 2D class, which is can be instantiated from script and a PathSolver class. The path solver does the heavy lifting using a priority queue. Classes are fairly well documented.
 
-If you do not wish to compile the source code yourself, precompiled binary files for Windows and OSX are available from the [Torque 2D Release Page](https://github.com/GarageGames/Torque2D/releases).
+### This looks a little different, something is up!
+True, I've added preferential pathing. What's that? Well, each node has a base cost. For example, roads could be a 2, and grass could be a 3. If you wish, the path solver could have a preference for roads. In this case, for the grass path to be selected over the road path, it would have to be at least half of the distance away when compared to the road path, otherwise the road path is selected.
 
-### Building the Source
+It isn't necessary to use this resource as indicated in the preceding paragraph. If it's preferable to use 0 as pathable and 1 as the blocker (standard A* stuff) the you can set it up that way as well.
 
-After downloading a copy of the source code, the following project files for each platform are provided for you and can be found in the `engine/compilers` folder.
+### How to compile it!
+Add the Array2D.cc and h to the torque2d/math filter
+Add the psPaths.cc and h to the torque2d/game filter
+Build.
 
-* **Windows:** Visual Studio 2010, 2012, or 2013 (works with the free, "Express for Windows Desktop" version)
-* **OSX:** Xcode
-* **Linux:** Make
-* **iOS:** Xcode_iOS
-* **Android:** Eclipse
-* **Web:** Emscripten/Cmake
+### How to use it!
+Instantiate an Array2D object, this will essentially be your navigational mesh. Set it up at the same time as you would when populating your CompositeSprite. Once level creation is complete, instantiate a PathSolver Object and pass the Array2D object in it's init function.
 
-See the [wiki](https://github.com/GarageGames/Torque2D/wiki) for available guides on platform setup and development.
+So, something like this:
 
-### Batteries Included
+    $NAVMESH = new Array2D();  
+    $NAVMESH.initializeArray($XSIZE, $YSIZE, 0);  
 
-![truck](http://t2dtutorials.com/img/Truck.png)
 
-Running Torque 2D for the first time out of the box will start you off in the Sandbox. The Sandbox is a collection of over 30 simple "toys" (or modules) which demonstrate various features in T2D. The default toy is a side scrolling level with a monster truck. To see a list of the available modules/toys to choose from, click on the `Show Tools` button in the lower right corner of the screen.
+To set the value of a node/tile/cell use this:
 
-Naturally all of the script code and assets for each toy are available to you in the modules folder to use as practical examples while learning T2D.
+    $NAVMESH.setValue(%x, %y, %cell.obstacleValue);  
 
-The Sandbox is also an excellent framework for rapidly prototyping your own game ideas - it allows for easy integration of additional modules and provides numerous debugging features, like console access and real-time metrics.
 
-### Documentation
+where %cell.obstacle could be a 1 if it's a blocker or 0 if it's pathable.
 
-All documentation for the open source version of Torque 2D can be found on our [Github wiki page](https://github.com/GarageGames/Torque2D/wiki). It contains many tutorials, detailed technical information on engine systems, a script reference guide automatically generated from the source code, and articles on how to contribute to our open source development.
+then, after the world is created, something like this:
 
-### Community
+// init path finding
+    $pathSolver = new PathSolver();  
+    $pathSolver.initGrid($NAVMESH,$XSIZE,$YSIZE, 0, 1);  
 
-Don't go it alone! Join the active community around Torque 2D at GarageGames.com. Ask questions, talk about T2D and general game development topics, learn the latest news, or post a blog promoting your game or showing off additional engine features in your T2D fork.
 
-* [Torque 2D Beginner Forum](http://www.garagegames.com/community/forums/84)
-* [Torque 2D Professional Forum](http://www.garagegames.com/community/forums/85)
-* [GarageGames Community Blogs](http://www.garagegames.com/community/blogs)
+Of note, when initializing the grid the last two variables are used to determine the maximum pathable(walkable) tile/node value. A zero is used if standard A * behaviour is wanted.
+
+To get a path back, you'd do something like this:
+
+    %path = $pathSolver.getPath( %startPos, %endPos );  
+
+
+the path that is returned is in the format of x,y x2,x2 x3,y3... etc...
+
+Of note, we are using the collision mesh for lighting. Works quite well for pre rendered scenes.
+
+How to debug?
+Well, you could step through and check everything. No I didn't add a render. The path is passed back as a string, so you could echo it or do something like this, of note, this part was taken from my friend and colleague LordSharpe:
+
+    %pathShapeVector = new ShapeVector();  
+      
+    %path = $pathSolver.getPath( %startPos, %endPos );  
+      
+    if (strlen(%path) > 0)   
+    {  
+        %formatedPath = "";    // ShapeVectors do not take commas  Must remove.  
+        %count = getWordCount( %path);  
+        for (%i = 0; %i < %count; %i++)   
+        {  
+            %pos = getWord(%path, %i);  
+            %pos = nextToken( %pos , "x" , "," );  
+            %pos = nextToken( %pos , "y" , "," );  
+      
+            %formatedPath = %formatedPath @ %x SPC %y SPC " ";  
+        }  
+      
+        %pathShapeVector.PolyList = %formatedPath;  
+      
+        %pathShapeVector.setPosition( %x, %y );  
+        %pathShapeVector.setLineColor( %colour );// some colour <- I'm Canadian and so there is a u in the word colour.  
+    }  
+
+
+
+### Why I didn't extend or use Composite Sprites rather than introducing Array2D?
+I could give a few answers for this, the simplest is that we wanted to use Array2D for many purposes. And also, I wanted this to be a drop in resource. No need to worry about me breaking your code, 'cause that sucks!
+
+### Why an init method?
+I was lazy, I should have added an initPersistFields method and added the fields. Sorry. Feel free to modify and update this resource :)
+
+### Spelling mistakes!!! UGH
+Again, sorry. I try hard to correctly spell everything, but they slip past me on occasion.
+
+Hope it's helpful for someone.
+- RT
