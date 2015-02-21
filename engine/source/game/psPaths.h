@@ -134,15 +134,16 @@ public:
 		const int pMinPassability
 		);
 
-	void PathSolver::updatePassability( int pX, int pY, int pValue );
-	int PathSolver::getPassability( int pX, int pY);
-	void PathSolver::setMaxPassability( int pPassibility );
-	void PathSolver::setMaxPathability( int pPathibility );
+	void updatePassability( int pX, int pY, int pValue );
+	int getPassability( int pX, int pY);
+	void setMaxPassability( int pPassibility );
+	void setMaxPathability( int pPathibility );
+	void GridToFile();
 
 	int				mTileMapWidth;
 	int				mTileMapHeight;
-	int PathSolver::getMaxPassability( );
-	int PathSolver::getMaxPathability( );
+	int getMaxPassability( );
+	int getMaxPathability( );
 
 	DECLARE_CONOBJECT( PathSolver );
 };
