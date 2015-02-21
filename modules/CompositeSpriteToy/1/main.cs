@@ -229,3 +229,23 @@ function CompositeSpriteToy::onTouchDown(%this, %touchID, %worldPosition)
     $READY_TO_PLACE_STARTING_LOCATION=false;
     $READY_TO_PLACE_GOAL_LOCATION = false;
 }
+
+function idToGridPos( %id )
+{
+    if( %id % $XSIZE )
+        %x = mFloor(%id / $XSIZE);
+    else
+        %x = mFloor(%id / $XSIZE) -1;
+
+    %y = %id - ($YSIZE * %x) - 1;
+
+    return %x @ "," @ %y;
+}
+
+function gridPosToID ( %pos )
+{
+    %pos = nextToken( %pos , "x" , "," );
+    %pos = nextToken( %pos , "y" , "," );
+
+    return ($YSIZE * %x) + %y + 1;
+}
