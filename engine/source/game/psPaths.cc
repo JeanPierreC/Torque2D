@@ -17,6 +17,7 @@ Notes:	Initially I set out to use Phil Shenk's resource and did not have much su
 */
 
 #include "./psPaths.h"
+#include <fstream>   // file I/O
 
 IMPLEMENT_CONOBJECT( PathSolver );
 
@@ -239,6 +240,23 @@ char* PathSolver::calculatePath(
 	return ""; // no route found
 }
 
+void PathSolver::GridToFile()
+{
+	ofstream fp_out;
+	fp_out.open("gridout.txt");
+
+	for( int x=0; x < mTileMapWidth; x++ )
+	{
+		for( int y=0; y < mTileMapHeight; y++ )
+		{
+			fp_out << mTileMap->getValueAt( x, y ) << " ";
+		}
+		fp_out << "\n";
+	}
+
+	fp_out.close();
+}
+
 /* Accessors and Modifiers */
 void PathSolver::setMaxPassability( int pPassability )
 {
@@ -382,4 +400,9 @@ ConsoleMethodWithDocs( PathSolver, setSize, ConsoleVoid, 3, 3, ( ) )
 	string y = coord.substr( posOfComma + 1, coord.length( ) - posOfComma + 1 );
 	object->mTileMapWidth =  atoi( x.c_str( ) );
 	object->mTileMapHeight =  atoi( y.c_str( ) );
+}
+
+ConsoleMethodWithDocs( PathSolver, GridOutToFile, ConsoleVoid, 2, 2, ( ) )
+{
+	object->GridToFile();
 }
